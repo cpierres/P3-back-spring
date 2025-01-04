@@ -1,18 +1,19 @@
 package com.cpierres.p3backspring.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.*;
 
-import java.time.Instant;
+import java.util.Objects;
 
+//@Data //incompatible avec Auditable ! oblige à devoir créer hashcode et equals ? Dommage
 @Getter
 @Setter
+@Builder
 @Entity
 @Table(name = "MESSAGES")
-public class Message {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Message extends Auditable {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,12 +30,16 @@ public class Message {
     @Column(name = "message", length = 2000)
     private String message;
 
-    @Column(name = "created_at")
-    @CreatedDate
-    private Instant createdAt;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message msg = (Message) o;
+        return Objects.equals(id, msg.id);
+    }
 
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private Instant updatedAt;
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

@@ -1,19 +1,20 @@
 package com.cpierres.p3backspring.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.util.Objects;
 
+//@Data//incompatible avec Auditable ! oblige à devoir créer hashcode et equals ?
 @Getter
 @Setter
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "RENTALS")
-public class Rental {
+@Entity
+public class Rental extends Auditable {
+//public class Rental {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,14 +37,19 @@ public class Rental {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
+    //TODO val par défaut temporaire à revoir une fois que j'aurai le user connecté
+    private User owner = User.builder().id(7).build();
 
-    @Column(name = "created_at")
-    @CreatedDate // Date de création
-    private Instant createdAt;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rental rental = (Rental) o;
+        return Objects.equals(id, rental.id);
+    }
 
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private Instant updatedAt;
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

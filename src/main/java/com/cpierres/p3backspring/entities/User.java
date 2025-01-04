@@ -1,18 +1,18 @@
 package com.cpierres.p3backspring.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.*;
 
-import java.time.Instant;
+import java.util.Objects;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "USERS")
-public class User {
+public class User extends Auditable {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +27,16 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "created_at")
-    @CreatedDate
-    private Instant createdAt;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(this.id, user.id);
+    }
 
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private Instant updatedAt;
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
