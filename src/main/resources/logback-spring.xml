@@ -1,0 +1,29 @@
+<configuration>
+    <!-- Encodeur Logstash personnalisé (plus tard) -->
+    <!-- appender name="LOGSTASH" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" -->
+            <!-- Personnaliser les champs supplémentaires dans le JSON -->
+            <!-- customFields>{"app_name":"MyApp", "env":"dev"}</customFields>
+        </encoder>
+    </appender -->
+
+    <!-- Appender supplémentaire pour afficher en texte simple (console) -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- logger name="com.example" level="DEBUG" additivity="false">
+        <appender-ref ref="LOGSTASH" />
+    </logger -->
+
+    <!-- Root Logger (par défaut) -->
+    <root level="info">
+        <appender-ref ref="CONSOLE" />
+        <!-- appender-ref ref="LOGSTASH" / -->
+    </root>
+    <!-- on peut aussi déclarer les logs dans application.properties -->
+    <!-- logger name="com.cpierres.p3backspring" level="debug" />
+    <logger name="org.zalando.logbook" level="trace" / -->
+</configuration>
