@@ -23,7 +23,9 @@ public class LogbookConfiguration {
         List<HeaderFilter> headerFilters = new ArrayList<>();
         //headerFilters.add(HeaderFilters.defaultValue());
         //headerFilters.add(HeaderFilters.authorization()); // Masque l'entête authorization
+
         //note : je souhaite volontairement afficher authorization
+        //le seul moyen que j'ai trouvé est d'ajouter un filtre manuellement (sinon authorization tjs caché)
         headerFilters.add(HeaderFilters.replaceHeaders("Set-Cookie", "****"));
 
         return Logbook.builder()

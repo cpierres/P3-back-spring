@@ -2,6 +2,7 @@ package com.cpierres.p3backspring.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -37,8 +38,8 @@ public class Rental extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "owner_id", nullable = false)
-    //TODO val par défaut temporaire à revoir une fois que j'aurai le user connecté
-    private User owner = User.builder().id(7).build();
+    @CreatedBy
+    private User owner;
 
     @Override
     public boolean equals(Object o) {

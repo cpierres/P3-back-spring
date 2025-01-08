@@ -2,6 +2,7 @@ package com.cpierres.p3backspring.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
 
 import java.util.Objects;
 
@@ -25,6 +26,7 @@ public class Message extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @CreatedBy
     private User user;
 
     @Column(name = "message", length = 2000)

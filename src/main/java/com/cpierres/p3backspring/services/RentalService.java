@@ -1,6 +1,8 @@
 package com.cpierres.p3backspring.services;
 
 import com.cpierres.p3backspring.entities.Rental;
+import com.cpierres.p3backspring.mappers.RentalMapper;
+import com.cpierres.p3backspring.model.RentalDto;
 import com.cpierres.p3backspring.repositories.RentalRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +14,27 @@ import java.util.List;
 @Service
 public class RentalService {
     private final RentalRepository rentalRepository;
+    private final RentalMapper rentalMapper;
 
     @Autowired
-    public RentalService(RentalRepository rentalRepository) {
+    public RentalService(RentalRepository rentalRepository,
+                         RentalMapper rentalMapper) {
         this.rentalRepository = rentalRepository;
+        this.rentalMapper = rentalMapper;
     }
 
     /**
      * Méthode pour créer un Rental
-     * @param rental Objet Rental à créer
+     *
+     * @param rentalDto Objet RentalDto à créer
      * @return Rental créé
      */
-    public Rental createRental(Rental rental) {
+    public Rental createRental(RentalDto rentalDto) {
         log.debug("*** RentalService.createRental ***");
+
+        // Mapper RentalDto vers Rental
+        Rental rental = rentalMapper.rentalDtoToRental(rentalDto);
+
         // Sauvegarder le Rental dans la base de données
         return rentalRepository.save(rental);
     }
