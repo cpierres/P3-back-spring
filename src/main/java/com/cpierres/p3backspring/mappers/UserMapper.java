@@ -12,7 +12,8 @@ public interface UserMapper {
     @Mapping(target = "password", source = "encodedPassword")
     User registerRequestToUser(RegisterRequest request, String encodedPassword);
 
-    User userDtoToUser(UserDto userDto);
-
+    @Mapping(target = "created_at", source = "createdAt")
+    @Mapping(target = "updated_at", source = "updatedAt")
     UserDto userToUserDto(User user);
+
 }

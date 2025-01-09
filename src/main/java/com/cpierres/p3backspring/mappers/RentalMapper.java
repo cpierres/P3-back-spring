@@ -11,10 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 public interface RentalMapper {
     // DIFFICULTE : Expose uniquement l'ID de l'owner (évite pb de sérialisation lors du GET rentals -
     // lié à la relation lazy avec user)
-    @Mapping(source = "owner.id", target = "ownerId")
-    //@Mapping(target = "picture", ignore = true)
+    @Mapping(source = "owner.id", target = "owner_id")
+    @Mapping(source = "createdAt", target = "created_at")
+    @Mapping(source = "updatedAt", target = "updated_at")
     RentalDto rentalToRentalDto(Rental rental);
 
+    @Mapping(source = "created_at", target = "createdAt")
+    @Mapping(source = "updated_at", target = "updatedAt")
     Rental rentalDtoToRental(RentalDto rentalDto);
 
     // Méthode générique de mapping

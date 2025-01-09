@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
 
 @Getter
+@Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class) // Active l'audit sur toutes les entités héritées
 public abstract class Auditable {
@@ -19,7 +20,6 @@ public abstract class Auditable {
     @CreationTimestamp
     private Instant createdAt;
 
-    @Setter
     @Column(name = "updated_at")
     @UpdateTimestamp
     private Instant updatedAt;
