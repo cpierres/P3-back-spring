@@ -5,10 +5,13 @@ import lombok.*;
 
 import java.util.Objects;
 
+//@Data //pas compatible avec extends
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Getter
 @Setter
-@Entity
 @Builder
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "USERS")
@@ -27,16 +30,4 @@ public class User extends Auditable {
     @Column(name = "password")
     private String password;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(this.id, user.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

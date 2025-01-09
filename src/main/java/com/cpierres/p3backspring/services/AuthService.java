@@ -68,6 +68,7 @@ public class AuthService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé!"));
-        return userMapper.userDtoToUserDto(user);
+        //log.debug("*** AuthService.getAuthenticatedUser: OK *** => userDto = " + userMapper.userToUserDto(user));
+        return userMapper.userToUserDto(user);
     }
 }

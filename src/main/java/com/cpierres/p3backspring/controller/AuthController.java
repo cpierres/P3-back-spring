@@ -57,6 +57,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody RegisterRequest request) {
         try {
+            log.debug("*** AuthController.registerUser ***");
             authService.registerNewUser(request);
             return ResponseEntity.ok("Utilisateur enregistré avec succès");//TODO token à la place
         } catch (RuntimeException e) {

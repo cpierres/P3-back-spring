@@ -7,9 +7,12 @@ import org.springframework.data.annotation.CreatedBy;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-//@Data//incompatible avec Auditable ! oblige à devoir créer hashcode et equals ?
+//@Data//incompatible avec Auditable
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Getter
 @Setter
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "RENTALS")
@@ -38,19 +41,6 @@ public class Rental extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "owner_id", nullable = false)
-    @CreatedBy
     private User owner;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Rental rental = (Rental) o;
-        return Objects.equals(id, rental.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

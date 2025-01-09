@@ -9,6 +9,6 @@ public class UserDto {
     private Integer id;
     private String name;
     private String email;
-    private Instant created_at;
-    private Instant updated_at;
+    private Instant createdAt;
+    private Instant updatedAt;
 }

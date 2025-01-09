@@ -1,6 +1,6 @@
 package com.cpierres.p3backspring.configuration;
 
-import com.cpierres.p3backspring.services.CustomUserDetailsService;
+//import com.cpierres.p3backspring.services.CustomUserDetailsService;
 import com.cpierres.p3backspring.services.JwtService;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import lombok.extern.slf4j.Slf4j;

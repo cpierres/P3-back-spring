@@ -3,6 +3,7 @@ package com.cpierres.p3backspring.controller;
 import com.cpierres.p3backspring.entities.Rental;
 import com.cpierres.p3backspring.mappers.RentalMapper;
 import com.cpierres.p3backspring.model.RentalDto;
+import com.cpierres.p3backspring.model.RentalSourceDto;
 import com.cpierres.p3backspring.services.JwtService;
 import com.cpierres.p3backspring.services.RentalService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,11 +31,11 @@ public class RentalController {
     /**
      * Endpoint pour créer un nouvel objet Rental
      *
-     * @param rentalDTO Rental reçu dans le body de la requête via un formData
+     * @param rentalSourceDto Rental reçu dans le body de la requête via un formData
      * @return Rental sauvegardé
      */
     @PostMapping
-    public ResponseEntity<Rental> createRental(@ModelAttribute RentalDto rentalDTO, HttpServletRequest request) {
+    public ResponseEntity<Rental> createRental(@ModelAttribute RentalSourceDto rentalSourceDto, HttpServletRequest request) {
         // Récupérer l'ID utilisateur via JwtService
         Integer ownerId = jwtService.extractUserIdFromRequest(request);
 
@@ -43,10 +44,10 @@ public class RentalController {
         }
 
         // Associer l'ID utilisateur au DTO
-        rentalDTO.setOwnerId(ownerId);
+        rentalSourceDto.setOwnerId(ownerId);
 
         // Appeler le service avec le DTO
-        Rental savedRental = rentalService.createRental(rentalDTO);
+        Rental savedRental = rentalService.createRental(rentalSourceDto);
 
         // Retourner la réponse HTTP
         return ResponseEntity.status(HttpStatus.CREATED).body(savedRental);

@@ -3,12 +3,15 @@ package com.cpierres.p3backspring.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
+@Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class) // Active l'audit sur toutes les entités héritées
 public abstract class Auditable {
@@ -16,6 +19,7 @@ public abstract class Auditable {
     @CreationTimestamp
     private Instant createdAt;
 
+    @Setter
     @Column(name = "updated_at")
     @UpdateTimestamp
     private Instant updatedAt;
