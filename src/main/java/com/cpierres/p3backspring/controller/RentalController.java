@@ -4,6 +4,7 @@ import com.cpierres.p3backspring.entities.Rental;
 import com.cpierres.p3backspring.mappers.RentalMapper;
 import com.cpierres.p3backspring.model.RentalDto;
 import com.cpierres.p3backspring.model.RentalSourceDto;
+import com.cpierres.p3backspring.model.RentalsResponse;
 import com.cpierres.p3backspring.services.JwtService;
 import com.cpierres.p3backspring.services.RentalService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -55,14 +56,16 @@ public class RentalController {
     }
 
     @GetMapping
-    public List<RentalDto> getAllRentals() {
+    public RentalsResponse getAllRentals() {
         //erreur de sérialisation à cause du lazy loading (Rental -> owner -> User)
         //return rentalService.getAllRentals();
 
         //passer par DTO pour ne garder que les attributs utiles
-        return rentalService.getAllRentals()
+        List<RentalDto> list = rentalService.getAllRentals()
                 .stream()
                 .map(rentalMapper::rentalToRentalDto) // Mapper chaque Rental en DTO
                 .toList();
+
+        return new RentalsResponse(list);
     }
 }

@@ -65,7 +65,7 @@ public class RentalService {
     private String extractUrlFromMultipartFile(MultipartFile file) {
         // Simuler l'extraction d'URL.
         // Ici, cette méthode pourrait appeler un service cloud (AWS S3, GCP, etc.).
-        return "https://cloud-storage.example.com/" + file.getOriginalFilename();
+        return "https://blog.technavio.org/wp-content/uploads/2018/12/" + file.getOriginalFilename();
     }
 
 
