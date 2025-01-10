@@ -8,12 +8,12 @@ import java.time.Instant;
 
 @Data
 @Builder
-public class RentalDto {
+public class RentalDetailDto {
     private Integer id;
     private String name;
     private BigDecimal surface;
     private BigDecimal price;
-    private String picture;
+    private String[] picture;
     private String description;
     private Integer owner_id;
     private Instant created_at;

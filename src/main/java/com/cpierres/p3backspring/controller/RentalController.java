@@ -2,6 +2,7 @@ package com.cpierres.p3backspring.controller;
 
 import com.cpierres.p3backspring.entities.Rental;
 import com.cpierres.p3backspring.mappers.RentalMapper;
+import com.cpierres.p3backspring.model.RentalDetailDto;
 import com.cpierres.p3backspring.model.RentalDto;
 import com.cpierres.p3backspring.model.RentalSourceDto;
 import com.cpierres.p3backspring.model.RentalsResponse;
@@ -67,5 +68,32 @@ public class RentalController {
                 .toList();
 
         return new RentalsResponse(list);
+    }
+
+    /**
+     * Récupérer le détail d'un Rental par son ID
+     *
+     * @param id Identifiant du Rental
+     * @return RentalDetailDto contenant les informations du Rental
+     */
+    @GetMapping("/{id}")
+    public RentalDetailDto getRentalDetail(@PathVariable Integer id) {
+        return rentalService.getRentalById(id);
+    }
+
+    /**
+     * Mettre à jour une location avec le paramètre id.
+     * Données soumises en form data.
+     *
+     * @param id identifiant unique de la location
+     * @param rentalDetailDto données de détails de la location fournies dans le body de la request.
+     * @return A ResponseEntity containing the updated RentalDto object.
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<RentalDto> updateRental(
+            @PathVariable Integer id,
+            @ModelAttribute RentalDetailDto rentalDetailDto) {
+        RentalDto updatedRental = rentalService.updateRental(id, rentalDetailDto);
+        return ResponseEntity.ok(updatedRental);
     }
 }

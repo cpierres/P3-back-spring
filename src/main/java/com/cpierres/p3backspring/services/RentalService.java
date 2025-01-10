@@ -5,17 +5,17 @@ import com.cpierres.p3backspring.entities.User;
 import com.cpierres.p3backspring.mappers.RentalMapper;
 import com.cpierres.p3backspring.model.RentalDto;
 import com.cpierres.p3backspring.model.RentalSourceDto;
+import com.cpierres.p3backspring.model.RentalDetailDto;
 import com.cpierres.p3backspring.model.UserDto;
 import com.cpierres.p3backspring.repositories.RentalRepository;
+import com.cpierres.p3backspring.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -23,14 +23,17 @@ public class RentalService {
     private final RentalRepository rentalRepository;
     private final RentalMapper rentalMapper;
     private final AuthService authService;
+    private final UserRepository userRepository;
 
     @Autowired
     public RentalService(RentalRepository rentalRepository,
                          RentalMapper rentalMapper,
-                         AuthService authService) {
+                         AuthService authService,
+                         UserRepository userRepository) {
         this.rentalRepository = rentalRepository;
         this.rentalMapper = rentalMapper;
         this.authService = authService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -57,19 +60,62 @@ public class RentalService {
 //            rental.setPicture(pictureUrl);
 //        }
 
-
         // Sauvegarder le Rental dans la base de données
         return rentalRepository.save(rental);
     }
 
-    private String extractUrlFromMultipartFile(MultipartFile file) {
-        // Simuler l'extraction d'URL.
-        // Ici, cette méthode pourrait appeler un service cloud (AWS S3, GCP, etc.).
-        return "https://blog.technavio.org/wp-content/uploads/2018/12/" + file.getOriginalFilename();
-    }
-
+//    private String extractUrlFromMultipartFile(MultipartFile file) {
+//        // Simuler l'extraction d'URL.
+//        // Ici, cette méthode pourrait appeler un service cloud (AWS S3, GCP, etc.).
+//        return "https://blog.technavio.org/wp-content/uploads/2018/12/" + file.getOriginalFilename();
+//    }
 
     public List<Rental> getAllRentals() {
         return rentalRepository.findAll();
+    }
+
+    /**
+     * Récupérer le détail d'un Rental par son ID
+     *
+     * @param id Identifiant du Rental
+     * @return RentalDetailDto contenant les informations du Rental
+     */
+    public RentalDetailDto getRentalById(Integer id) {
+        log.debug("Fetching rental detail for ID: {}", id);
+
+        Rental rental = rentalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Location id: " + id+ " non trouvée"));
+
+        // Mapper l'entité Rental vers RentalDetailDto
+        return rentalMapper.rentalToRentalDetailDto(rental);
+    }
+
+
+    public RentalDto updateRental(Integer id, RentalDetailDto rentalDetailDto) {
+        // Vérifie si la location existe
+        Rental rental = rentalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Location avec id: " + id+" non trouvé"));
+
+        // Mettre à jour les propriétés de l'entité existante avec les valeurs reçues
+        rental.setName(rentalDetailDto.getName());
+        rental.setSurface(rentalDetailDto.getSurface());
+        rental.setPrice(rentalDetailDto.getPrice());
+        String[] pictures = rentalDetailDto.getPicture();
+        if (pictures != null && pictures.length > 0) {
+           rental.setPicture(pictures[0]);
+        }
+
+        rental.setDescription(rentalDetailDto.getDescription());
+        if (rentalDetailDto.getOwner_id() != null) {
+            User existingUser = userRepository.findById(rentalDetailDto.getOwner_id())
+                    .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé"));
+            rental.setOwner(existingUser);
+        }
+
+        // Sauvegarder l'entité mise à jour
+        Rental updatedRental = rentalRepository.save(rental);
+
+        // Retourner un DTO mis à jour
+        return rentalMapper.rentalToRentalDto(updatedRental);
     }
 }
