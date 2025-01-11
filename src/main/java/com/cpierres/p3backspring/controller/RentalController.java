@@ -87,10 +87,10 @@ public class RentalController {
      * @return A ResponseEntity containing the updated RentalDto object.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<RentalDto> updateRental(
+    public ResponseEntity<RentalResponse> updateRental(
             @PathVariable Integer id,
             @ModelAttribute RentalDetailDto rentalDetailDto) {
         RentalDto updatedRental = rentalService.updateRental(id, rentalDetailDto);
-        return ResponseEntity.ok(updatedRental);
+        return ResponseEntity.ok(new RentalResponse("Location "+updatedRental.getName()+" mise à jour !"));
     }
 }
