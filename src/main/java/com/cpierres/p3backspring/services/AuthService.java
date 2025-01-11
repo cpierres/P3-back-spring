@@ -4,7 +4,6 @@ import com.cpierres.p3backspring.entities.User;
 import com.cpierres.p3backspring.mappers.UserMapper;
 import com.cpierres.p3backspring.model.LoginRequest;
 import com.cpierres.p3backspring.model.RegisterRequest;
-import com.cpierres.p3backspring.model.UserDto;
 import com.cpierres.p3backspring.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,11 +63,18 @@ public class AuthService {
         userRepository.save(newUser);
     }
 
-    public UserDto getAuthenticatedUser() {
+//    public UserDto getAuthenticatedUser() {
+//        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+//        User user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé!"));
+//        //log.debug("*** AuthService.getAuthenticatedUser: OK *** => userDto = " + userMapper.userToUserDto(user));
+//        return userMapper.userToUserDto(user);
+//    }
+
+    public User getAuthenticatedUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé!"));
         //log.debug("*** AuthService.getAuthenticatedUser: OK *** => userDto = " + userMapper.userToUserDto(user));
-        return userMapper.userToUserDto(user);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé!"));
     }
 }

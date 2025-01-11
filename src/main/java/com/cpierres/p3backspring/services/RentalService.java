@@ -3,16 +3,13 @@ package com.cpierres.p3backspring.services;
 import com.cpierres.p3backspring.entities.Rental;
 import com.cpierres.p3backspring.entities.User;
 import com.cpierres.p3backspring.mappers.RentalMapper;
-import com.cpierres.p3backspring.model.RentalDto;
-import com.cpierres.p3backspring.model.RentalSourceDto;
-import com.cpierres.p3backspring.model.RentalDetailDto;
-import com.cpierres.p3backspring.model.UserDto;
+import com.cpierres.p3backspring.mappers.UserMapper;
+import com.cpierres.p3backspring.model.*;
 import com.cpierres.p3backspring.repositories.RentalRepository;
 import com.cpierres.p3backspring.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,16 +21,19 @@ public class RentalService {
     private final RentalMapper rentalMapper;
     private final AuthService authService;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Autowired
     public RentalService(RentalRepository rentalRepository,
                          RentalMapper rentalMapper,
                          AuthService authService,
-                         UserRepository userRepository) {
+                         UserRepository userRepository,
+                         UserMapper userMapper) {
         this.rentalRepository = rentalRepository;
         this.rentalMapper = rentalMapper;
         this.authService = authService;
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -46,7 +46,7 @@ public class RentalService {
         log.debug("*** RentalService.createRental ***");
 
         // Mapper RentalDto vers Rental
-        UserDto userDto = this.authService.getAuthenticatedUser();
+        UserDto userDto = userMapper.userToUserDto(this.authService.getAuthenticatedUser());
         RentalDto rentalDto = rentalMapper.rentalSourceDtoToRentalDto(rentalSourceDto);
         //rentalDto.setOwnerId(userDto.getId());//DIFFICULTE
         Rental rental = rentalMapper.rentalDtoToRental(rentalDto);
@@ -66,7 +66,6 @@ public class RentalService {
 
 //    private String extractUrlFromMultipartFile(MultipartFile file) {
 //        // Simuler l'extraction d'URL.
-//        // Ici, cette méthode pourrait appeler un service cloud (AWS S3, GCP, etc.).
 //        return "https://blog.technavio.org/wp-content/uploads/2018/12/" + file.getOriginalFilename();
 //    }
 
@@ -84,7 +83,7 @@ public class RentalService {
         log.debug("Fetching rental detail for ID: {}", id);
 
         Rental rental = rentalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Location id: " + id+ " non trouvée"));
+                .orElseThrow(() -> new RuntimeException("Location id: " + id + " non trouvée"));
 
         // Mapper l'entité Rental vers RentalDetailDto
         return rentalMapper.rentalToRentalDetailDto(rental);
@@ -94,7 +93,7 @@ public class RentalService {
     public RentalDto updateRental(Integer id, RentalDetailDto rentalDetailDto) {
         // Vérifie si la location existe
         Rental rental = rentalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Location avec id: " + id+" non trouvé"));
+                .orElseThrow(() -> new RuntimeException("Location avec id: " + id + " non trouvé"));
 
         // Mettre à jour les propriétés de l'entité existante avec les valeurs reçues
         rental.setName(rentalDetailDto.getName());
@@ -102,7 +101,7 @@ public class RentalService {
         rental.setPrice(rentalDetailDto.getPrice());
         String[] pictures = rentalDetailDto.getPicture();
         if (pictures != null && pictures.length > 0) {
-           rental.setPicture(pictures[0]);
+            rental.setPicture(pictures[0]);
         }
 
         rental.setDescription(rentalDetailDto.getDescription());

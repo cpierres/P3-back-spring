@@ -1,5 +1,6 @@
 package com.cpierres.p3backspring.controller;
 
+import com.cpierres.p3backspring.mappers.UserMapper;
 import com.cpierres.p3backspring.model.AuthSuccess;
 import com.cpierres.p3backspring.model.LoginRequest;
 import com.cpierres.p3backspring.model.RegisterRequest;
@@ -21,18 +22,21 @@ public class AuthController {
 
     private final AuthService authService;
     private final JwtService jwtService;
+    private final UserMapper userMapper ;
     //private final AuthenticationManager authenticationManager;
 
 
     @Autowired
     public AuthController(
             AuthService authService,
-            JwtService jwtService
-            //, AuthenticationManager authenticationManager
+            JwtService jwtService,
+            // AuthenticationManager authenticationManager
+            UserMapper userMapper
             ) {
         this.authService = authService;
         this.jwtService = jwtService;
         //this.authenticationManager = authenticationManager;
+        this.userMapper = userMapper;
     }
 
     @PostMapping("/login")
@@ -69,10 +73,10 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser() {
         try {
-            UserDto currentUser = authService.getAuthenticatedUser();
+            UserDto currentUser = userMapper.userToUserDto(authService.getAuthenticatedUser());
             return ResponseEntity.ok(currentUser);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(401).body("Unable to retrieve the authenticated user!");
+            return ResponseEntity.status(401).body("Impossible de retrouver l'utilisateur connecté!");
         }
     }
 }
