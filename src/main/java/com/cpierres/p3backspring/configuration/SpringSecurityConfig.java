@@ -54,7 +54,12 @@ public class SpringSecurityConfig {
                 .csrf(csrf -> csrf.disable())//inutile pour rest (utile si cookie)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Pas de sessions côté serveur
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/auth/register").permitAll() // Autorisé sans authentification
+                        .requestMatchers(
+                                "/api/auth/login",
+                                "/api/auth/register",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll() // Autorisé sans authentification
                         .anyRequest().authenticated() // Protège toutes les autres routes
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
