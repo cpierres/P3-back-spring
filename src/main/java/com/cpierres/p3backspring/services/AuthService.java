@@ -42,7 +42,7 @@ public class AuthService {
         }
     }
 
-    public void registerNewUser(RegisterRequest request) {
+    public User registerNewUser(RegisterRequest request) {
         // Vérifier si l'utilisateur existe déjà
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Un utilisateur avec cet email existe déjà !");
@@ -60,7 +60,7 @@ public class AuthService {
         User newUser = userMapper.registerRequestToUser(request,encodedPassword);
 
         // Sauvegarder en base
-        userRepository.save(newUser);
+        return userRepository.save(newUser);
     }
 
 //    public UserDto getAuthenticatedUser() {
