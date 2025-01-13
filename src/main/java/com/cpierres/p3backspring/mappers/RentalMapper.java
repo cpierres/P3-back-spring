@@ -2,7 +2,7 @@ package com.cpierres.p3backspring.mappers;
 
 import com.cpierres.p3backspring.entities.Rental;
 import com.cpierres.p3backspring.model.RentalDetailDto;
-import com.cpierres.p3backspring.model.RentalSourceDto;
+import com.cpierres.p3backspring.model.RentalMultipartDto;
 import com.cpierres.p3backspring.model.RentalDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,7 +24,7 @@ public interface RentalMapper {
 
     // Méthode générique de mapping
     @Mapping(source = "picture", target = "picture")
-    RentalDto rentalSourceDtoToRentalDto(RentalSourceDto source);
+    RentalDto rentalMultipartDtoToRentalDto(RentalMultipartDto source);
 
     // Méthode explicite pour convertir MultipartFile en String
     default String map(MultipartFile value) {

@@ -40,15 +40,15 @@ public class RentalService {
     /**
      * Méthode pour créer un Rental
      *
-     * @param rentalSourceDto Objet RentalDto à créer
+     * @param rentalMultipartDto Objet RentalDto à créer
      * @return Rental créé
      */
-    public Rental createRental(RentalSourceDto rentalSourceDto) {
+    public Rental createRental(RentalMultipartDto rentalMultipartDto) {
         log.debug("*** RentalService.createRental ***");
 
         // Mapper RentalDto vers Rental
         UserDto userDto = userMapper.userToUserDto(this.authService.getAuthenticatedUser());
-        RentalDto rentalDto = rentalMapper.rentalSourceDtoToRentalDto(rentalSourceDto);
+        RentalDto rentalDto = rentalMapper.rentalMultipartDtoToRentalDto(rentalMultipartDto);
         //rentalDto.setOwnerId(userDto.getId());//DIFFICULTE
         Rental rental = rentalMapper.rentalDtoToRental(rentalDto);
         rental.setOwner(User.builder().id(userDto.getId()).build());

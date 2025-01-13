@@ -2,10 +2,6 @@ package com.cpierres.p3backspring.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
-
-import java.math.BigDecimal;
-import java.util.Objects;
 
 //@Data//incompatible avec Auditable
 @EqualsAndHashCode(callSuper = true)
@@ -28,10 +24,10 @@ public class Rental extends Auditable {
     private String name;
 
     @Column(name = "surface", precision = 10)
-    private BigDecimal surface;
+    private Integer surface;
 
     @Column(name = "price", precision = 10)
-    private BigDecimal price;
+    private Integer price;
 
     @Column(name = "picture")
     private String picture;
