@@ -1,13 +1,12 @@
 package com.cpierres.p3backspring.services;
 
-import java.security.Key;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -15,31 +14,32 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 import java.util.Date;
 
+
 @Slf4j
 @Component
 public class JwtService {
-    private static final long EXPIRATION_TIME = 3600 * 1000; // 1 heure (en millisecondes)
-    //private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);//Clé secrète
-    private static final String BASE64_SECRET = "G2urFhZkMI9/4z0jAlb5FrYPm8ZtRQjg/XwUN5893LI=";
-    private static final SecretKey SECRET_KEY = new SecretKeySpec(
-            Base64.getDecoder().decode(BASE64_SECRET), // Décodage Base64
-            SignatureAlgorithm.HS256.getJcaName() // Algorithme HMAC-SHA256
-    );
+    @Value("${JWT_SECRET_KEY}")
+    private String BASE64_SECRET;
 
+    private SecretKey SECRET_KEY;
 
+    @PostConstruct
+    public void initializeSecretKey() {
+        SECRET_KEY = new SecretKeySpec(
+                Base64.getDecoder().decode(BASE64_SECRET),
+                SignatureAlgorithm.HS256.getJcaName()
+        );
+    }
 
     // Générer un token JWT
     public String generateToken(Integer id, String username) {
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(username) // Nom d'utilisateur (claim "sub")
                 .claim("id", id)      // Claim personnalisé pour inclure l'ID du user nécessaire
                 .setIssuedAt(new Date()) // Date d'émission
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // Expiration
+                .setExpiration(new Date(System.currentTimeMillis() + 3600 * 1000)) // Expiration
                 .signWith(SECRET_KEY) // Signature avec clé secrète
                 .compact();
-        //log.debug("**** generateToken(id:"+id+", username: "+username+" ) -> "+token+" ****");
-
-        return token;
     }
 
     // Renvoyer la clé pour la configuration côté Resource Server
