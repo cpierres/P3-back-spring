@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql8_opencr_projet03_container
+    environment:
+      MYSQL_ROOT_PASSWORD: opencr_pw_root
+      MYSQL_DATABASE: opencr_db_prj03
+      MYSQL_USER: opencr_user
+      MYSQL_PASSWORD: opencr_pw1!
+    volumes:
+      - /volume1/docker/mysql8_opencr_projet03/data:/var/lib/mysql
+    ports:
+      - 3311:3306
