@@ -1,6 +1,7 @@
 package com.cpierres.p3backspring.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,6 @@ public class MessageRequest {
     @NotNull(message = "user_id obligatoire")
     private Integer user_id;
 
-    @NotNull(message = "Message obligatoire")
+    @NotBlank(message = "Message obligatoire")
     private String message;
 }

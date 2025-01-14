@@ -3,7 +3,9 @@ package com.cpierres.p3backspring.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 
@@ -29,14 +31,12 @@ public class RentalDto {
     @NotNull(message = "Le prix doit être renseigné")
     private Integer price;
 
+    @Schema(
+            description = "Url de l'image ou photo associée à la location",
+            example = "https://blog.technavio.org/wp-content/uploads/2018/12/Online-House-Rental-Sites.jpg"
+    )
     private String picture;
 
-    @Schema(
-            description = "Image ou photo associée à la location",
-            type = "string", // Swagger lit `MultipartFile` en tant que fichier string
-            format = "binary",
-            example= "https://blog.technavio.org/wp-content/uploads/2018/12/Online-House-Rental-Sites.jpg"
-    )
     private String description;
 
     private Integer owner_id;
