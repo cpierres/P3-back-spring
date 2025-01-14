@@ -18,11 +18,8 @@ public interface RentalMapper {
     @Mapping(source = "updatedAt", target = "updated_at")
     RentalDto rentalToRentalDto(Rental rental);
 
-    @Mapping(source = "created_at", target = "createdAt")
-    @Mapping(source = "updated_at", target = "updatedAt")
     Rental rentalDtoToRental(RentalDto rentalDto);
 
-    // Méthode générique de mapping
     @Mapping(source = "picture", target = "picture")
     RentalDto rentalMultipartDtoToRentalDto(RentalMultipartDto source);
 
