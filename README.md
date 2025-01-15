@@ -107,7 +107,8 @@ Ajoutez les variables d'environnement suivantes à votre système :
 Le stockage des fichiers multimédia est géré via l'api [Cloudinary](https://cloudinary.com/homepage).
 Il faut créer un compte sur ce site et définir les variables d'environnement suivantes :
 
-Des valeurs par défaut sont fournies sur un compte de démo (**ne pas utiliser en prod**).
+Des valeurs vers un compte de démo sont communiquées indépendamment du README présent (sur README.txt dédié
+sur le serveur OpenClassrooms)
 - **`P3_CLOUDINARY_NAME`** : nom du cloudinary de prod
 - **`P3_API_KEY`** : api key du cloudinary de prod
 - **`P3_API_SECRET`** : api secret ddu cloudinary de prod
