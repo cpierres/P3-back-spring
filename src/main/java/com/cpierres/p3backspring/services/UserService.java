@@ -1,7 +1,7 @@
 package com.cpierres.p3backspring.services;
 
 import com.cpierres.p3backspring.entities.User;
-import com.cpierres.p3backspring.exception.UserNotFoundException;
+import com.cpierres.p3backspring.exception.ResourceNotFoundException;
 import com.cpierres.p3backspring.mappers.UserMapper;
 import com.cpierres.p3backspring.model.UserDto;
 import com.cpierres.p3backspring.repositories.UserRepository;
@@ -27,7 +27,7 @@ public class UserService {
      */
     public UserDto getUserById(Integer id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Utilisateur introuvable pour l'ID : " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur introuvable pour l'ID : " + id));
         return userMapper.userToUserDto(user);
     }
 }

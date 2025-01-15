@@ -36,10 +36,23 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(UploadFailedException.class)
     public ResponseEntity<MessageResponse> handleUploadFailedException(UploadFailedException ex) {
-
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR) // Code 500
                 .body(new MessageResponse("Erreur lors du téléchargement de l'image : " + ex.getMessage()));
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistException.class)
+    public ResponseEntity<MessageResponse> handleResourceAlreadyExistException(ResourceAlreadyExistException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // Code 409
+                .body(new MessageResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<MessageResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND) // Code 404
+                .body(new MessageResponse(ex.getMessage()));
     }
 }
 

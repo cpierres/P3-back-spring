@@ -2,7 +2,7 @@ package com.cpierres.p3backspring.services;
 
 import com.cpierres.p3backspring.entities.Rental;
 import com.cpierres.p3backspring.entities.User;
-import com.cpierres.p3backspring.exception.RentalNotFoundException;
+import com.cpierres.p3backspring.exception.ResourceNotFoundException;
 import com.cpierres.p3backspring.mappers.RentalMapper;
 import com.cpierres.p3backspring.mappers.UserMapper;
 import com.cpierres.p3backspring.model.RentalDetailDto;
@@ -81,7 +81,7 @@ public class RentalService {
         log.debug("Fetching rental detail for ID: {}", id);
 
         Rental rental = rentalRepository.findById(id)
-                .orElseThrow(() -> new RentalNotFoundException("Location id: " + id + " non trouvée"));
+                .orElseThrow(() -> new ResourceNotFoundException("Location id: " + id + " non trouvée"));
 
         // Mapper l'entité Rental vers RentalDetailDto
         return rentalMapper.rentalToRentalDetailDto(rental);
@@ -91,7 +91,7 @@ public class RentalService {
     public RentalDto updateRental(Integer id, RentalDetailDto rentalDetailDto) {
         // Vérifie si la location existe
         Rental rental = rentalRepository.findById(id)
-                .orElseThrow(() -> new RentalNotFoundException("Location avec id: " + id + " non trouvé"));
+                .orElseThrow(() -> new ResourceNotFoundException("Location avec id: " + id + " non trouvé"));
 
         // Mettre à jour les propriétés de l'entité existante avec les valeurs reçues
         rental.setName(rentalDetailDto.getName());

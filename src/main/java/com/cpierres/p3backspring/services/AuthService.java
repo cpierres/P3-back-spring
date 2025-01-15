@@ -1,6 +1,8 @@
 package com.cpierres.p3backspring.services;
 
 import com.cpierres.p3backspring.entities.User;
+import com.cpierres.p3backspring.exception.ResourceAlreadyExistException;
+import com.cpierres.p3backspring.exception.ResourceNotFoundException;
 import com.cpierres.p3backspring.mappers.UserMapper;
 import com.cpierres.p3backspring.model.LoginRequest;
 import com.cpierres.p3backspring.model.RegisterRequest;
@@ -45,7 +47,7 @@ public class AuthService {
     public User registerNewUser(RegisterRequest request) {
         // Vérifier si l'utilisateur existe déjà
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Un utilisateur avec cet email existe déjà !");
+            throw new ResourceAlreadyExistException("Un utilisateur avec cet email existe déjà !");
         }
 
 //        // Créer un nouvel utilisateur avec le mot de passe haché ; mapping MANUEL (lourd et non centralisé)
@@ -75,6 +77,6 @@ public class AuthService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         //log.debug("*** AuthService.getAuthenticatedUser: OK *** => userDto = " + userMapper.userToUserDto(user));
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé!"));
     }
 }

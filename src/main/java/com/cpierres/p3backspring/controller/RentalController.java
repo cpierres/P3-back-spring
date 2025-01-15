@@ -1,7 +1,6 @@
 package com.cpierres.p3backspring.controller;
 
 import com.cpierres.p3backspring.entities.Rental;
-import com.cpierres.p3backspring.exception.RentalNotFoundException;
 import com.cpierres.p3backspring.mappers.RentalMapper;
 import com.cpierres.p3backspring.model.*;
 import com.cpierres.p3backspring.services.RentalService;
@@ -30,11 +29,6 @@ public class RentalController {
     public RentalController(RentalService rentalService, RentalMapper rentalMapper) {
         this.rentalService = rentalService;
         this.rentalMapper = rentalMapper;
-    }
-
-    @ExceptionHandler(RentalNotFoundException.class)
-    public ResponseEntity<RentalResponse> handleUserNotFoundException(RentalNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RentalResponse(ex.getMessage()));
     }
 
     @Operation(

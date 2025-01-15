@@ -1,6 +1,6 @@
 package com.cpierres.p3backspring.controller;
 
-import com.cpierres.p3backspring.exception.UserNotFoundException;
+import com.cpierres.p3backspring.model.MessageResponse;
 import com.cpierres.p3backspring.model.UserDto;
 import com.cpierres.p3backspring.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,9 +10,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/user")
@@ -25,12 +27,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
-        // Retourne une réponse 404 avec le message de l'exception.
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
-
     @Operation(summary = "Récupérer le détail d'un utilisateur via son ID (authentification requise)",
             description = "Récupération des informations détaillées sur un utilisateur grâce à son ID.")
     @ApiResponses(value = {
@@ -39,8 +35,12 @@ public class UserController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = UserDto.class)
                     )),
-            @ApiResponse(responseCode = "404", description = "Utilisateur introuvable."),
-            @ApiResponse(responseCode = "401", description = "Non autorisé. Authentification requise pour accéder à cet endpoint.")
+            @ApiResponse(responseCode = "401", description = "Non autorisé. Authentification requise pour accéder à cet endpoint."),
+            @ApiResponse(responseCode = "404", description = "Utilisateur introuvable.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = MessageResponse.class)
+                    ))
     })
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(
