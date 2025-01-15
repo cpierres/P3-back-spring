@@ -1,11 +1,32 @@
 # Projet P3 Backend Spring pour :
 ![Chatop.jpg](assets/docs/images/Chatop.jpg)
 
+## Table des matières
+
+- [Description du projet](#description-du-projet)
+- [Installation de la base de données](#installation-de-la-base-de-donnees)
+- [Installation et lancement du projet](#installation-et-lancement-du-projet)
+- [URL de la documentation Swagger](#url-de-la-documentation-swagger)
+- [Chargement du front-end correspondant](#chargement-du-front-end-correspondant)
+- [Alternative : Tester le backend avec Postman](#alternative--tester-le-backend-avec-postman)
+- [Remarques](#remarques)
+- [Auteur et contributeur](#auteur-et-contributeur)
+
+## Auteur et dépôts
+- Auteur : Christophe Pierrès
+- Dans le cadre du projet N°3 d'OpenClassrooms (premier projet Backend), en vue d'obtenir la certification **Expert en développement logiciel**. Plus d'informations disponibles [ici](https://www.francecompetences.fr/recherche/rncp/36912/)
+- Dépôt GitHub du backend : https://github.com/cpierres/P3-back-spring 
+- Dépôt Github pour le frontend correspondant : https://github.com/cpierres/P3-front-angular (fork depuis OpenClassrooms)
+
+## Description du projet
+Gère le backend d'un site internet de location immobilière rapprochant les propriétaires et les demandeurs.
+Il s'agit du projet 3 dans le cadre de la certification OpenClassrooms, pour le client Chatop.
+
 ## Installation de la base de données
 Cette section explique comment installer et configurer la base de données MySQL pour un poste de développeur.
 
 ### Étape 1 : Configuration de Docker
-Créez une machine Docker contenant MySQL à l'aide du fichier `docker-compose.yml` suivant :
+Créez une container Docker contenant MySQL à l'aide du fichier `docker-compose.yml` suivant :
 
 ```yaml
 version: '3.8'
@@ -45,7 +66,7 @@ La structure de la DB est celle-ci :
 ## Installation et lancement du projet
 
 ### Étape 1 : Configuration des variables d'environnement
-Ajoutez les variables d'environnement suivantes à votre système ou à votre fichier de configuration :
+Ajoutez les variables d'environnement suivantes à votre système :
 - **`P3_JWT_SECRET_KEY`** : Génère une clé HS256 pour la gestion des tokens.  
   Vous pouvez générer cette clé avec la classe utilitaire suivante :
   ```java
@@ -142,10 +163,13 @@ npm run start
 
 Le front sera accessible à l'URL suivante :  
 `http://localhost:4200`  
-Connectez-le directement au back-end pour l'utiliser.
+Ce front doit être connecté au back-end pour l'utiliser.
+
+Pour une application nouvellement installée, nous vous conseillons d'utiliser la fonctionnalité `Register` 
+afin de créer un utilisateur. La connexion sera alors effectuée dans la foulée.
 
 ---
-## Tester le backend avec Postman
+## Alternative : Tester le backend avec Postman
 Vous pouvez tester facilement le backend à l'aide de Postman en important une collection prédéfinie.
 
 ### Étape 1 : Localiser la collection Postman
@@ -161,7 +185,7 @@ Le fichier de collection Postman se trouve dans le répertoire suivant du projet
 ### Étape 3 : Authentification 
 Appel de GET /api/auth/register pour vous inscrire en tant qu'utilisateur
 Si déjà inscrit, Appel de GET /api/auth/login  
-Après le succès de l'authentification, setter le token vers la variable d'environnement token-value
+Après le succès de l'authentification, setter le token de la réponse vers la variable d'environnement `{{token-value}}`
 
 ### Étape 4 : Exécuter les requêtes
 Vous pouvez maintenant exécuter les requêtes pour tester les endpoints du backend. 
@@ -175,5 +199,10 @@ Chaque requête inclut les headers, les body, et l'authentification nécessaires
 - **Front/Back** : Veillez à ce que les ports et les URLs des deux projets soient correctement synchronisés.
 
 ---
+## Auteur et contributeur
 
+- [Christophe Pierrès](https://github.com/cpierres)
+- Rachid Oubraim, mentor d'OpenClassrooms
+
+---
 Bonne utilisation du projet !
