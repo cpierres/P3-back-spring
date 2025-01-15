@@ -5,7 +5,10 @@ import com.cpierres.p3backspring.entities.User;
 import com.cpierres.p3backspring.exception.RentalNotFoundException;
 import com.cpierres.p3backspring.mappers.RentalMapper;
 import com.cpierres.p3backspring.mappers.UserMapper;
-import com.cpierres.p3backspring.model.*;
+import com.cpierres.p3backspring.model.RentalDetailDto;
+import com.cpierres.p3backspring.model.RentalDto;
+import com.cpierres.p3backspring.model.RentalMultipartDto;
+import com.cpierres.p3backspring.model.UserDto;
 import com.cpierres.p3backspring.repositories.RentalRepository;
 import com.cpierres.p3backspring.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,18 +26,21 @@ public class RentalService {
     private final AuthService authService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final FileUploadService fileUploadService;
 
     @Autowired
     public RentalService(RentalRepository rentalRepository,
                          RentalMapper rentalMapper,
                          AuthService authService,
                          UserRepository userRepository,
-                         UserMapper userMapper) {
+                         UserMapper userMapper,
+                         FileUploadService fileUploadService) {
         this.rentalRepository = rentalRepository;
         this.rentalMapper = rentalMapper;
         this.authService = authService;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.fileUploadService = fileUploadService;
     }
 
     /**
@@ -46,29 +52,20 @@ public class RentalService {
     public Rental createRental(RentalMultipartDto rentalMultipartDto) {
         log.debug("*** RentalService.createRental ***");
 
-        // Mapper RentalDto vers Rental
-        UserDto userDto = userMapper.userToUserDto(this.authService.getAuthenticatedUser());
-        RentalDto rentalDto = rentalMapper.rentalMultipartDtoToRentalDto(rentalMultipartDto);
-        //rentalDto.setOwnerId(userDto.getId());//DIFFICULTE
-        Rental rental = rentalMapper.rentalDtoToRental(rentalDto);
-        rental.setOwner(User.builder().id(userDto.getId()).build());
+        // Télécharger l'image reçue dans le DTO avec Cloudinary
+        String pictureUrl = fileUploadService.uploadFile(rentalMultipartDto.getPicture());
 
-        // Vérifier si un fichier est présent et l'enregistrer.
-        // Simuler une extraction d'URL à partir du fichier.
-//        if (rentalDto.getPicture() != null && !rentalDto.getPicture().isEmpty()) {
-//            // extraction de l'URL à partir d'un jeton ou d'un service cloud.
-//            String pictureUrl = extractUrlFromMultipartFile(rentalDto.getPicture());
-//            rental.setPicture(pictureUrl);
-//        }
+        // Mapper RentalDto vers Rental
+        RentalDto rentalDto = rentalMapper.rentalMultipartDtoToRentalDto(rentalMultipartDto);
+        rentalDto.setPicture(pictureUrl);
+
+        Rental rental = rentalMapper.rentalDtoToRental(rentalDto);
+        UserDto userDto = userMapper.userToUserDto(this.authService.getAuthenticatedUser());
+        rental.setOwner(User.builder().id(userDto.getId()).build());
 
         // Sauvegarder le Rental dans la base de données
         return rentalRepository.save(rental);
     }
-
-//    private String extractUrlFromMultipartFile(MultipartFile file) {
-//        // Simuler l'extraction d'URL.
-//        return "https://blog.technavio.org/wp-content/uploads/2018/12/" + file.getOriginalFilename();
-//    }
 
     public List<Rental> getAllRentals() {
         return rentalRepository.findAll();

@@ -104,6 +104,14 @@ Ajoutez les variables d'environnement suivantes à votre système :
 
 - **`P3_PORT`** : Port du backend (par défaut : `3001`). Doit être en adéquation avec le frontend.
 
+Le stockage des fichiers multimédia est géré via l'api [Cloudinary](https://cloudinary.com/homepage).
+Il faut créer un compte sur ce site et définir les variables d'environnement suivantes :
+
+Des valeurs par défaut sont fournies sur un compte de démo (**ne pas utiliser en prod**).
+- **`P3_CLOUDINARY_NAME`** : nom du cloudinary de prod
+- **`P3_API_KEY`** : api key du cloudinary de prod
+- **`P3_API_SECRET`** : api secret ddu cloudinary de prod
+
 ### Étape 2 : Lancement du backend
 1. Assurez-vous que les variables d'environnement sont correctement définies.
 2. Exécutez la commande suivante pour démarrer l'application :

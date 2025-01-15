@@ -37,12 +37,6 @@ public class RentalController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RentalResponse(ex.getMessage()));
     }
 
-    /**
-     * Endpoint pour créer un nouvel objet Rental
-     *
-     * @param rentalMultipartDto Rental reçu dans le body de la requête via un formData
-     * @return Rental sauvegardé
-     */
     @Operation(
             summary = "Créer une location",
             description = "Ajoute une location à partir des données fournies dans la requête, y compris une image pour picture.",
@@ -54,22 +48,18 @@ public class RentalController {
             ),
             responses = {
                     @ApiResponse(responseCode = "201", description = "Location créée avec succès.",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponse.class))),
-                    @ApiResponse(responseCode = "400", description = "Les données de requête sont invalides."),
-                    @ApiResponse(responseCode = "401", description = "Utilisateur non authentifié")
+                           content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "Les données de requête sont invalides.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponse.class))),
+                    @ApiResponse(responseCode = "401", description = "Utilisateur non authentifié",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponse.class))),
+                    @ApiResponse(responseCode = "500", description = "Erreur lors du téléchargement de l'image.",
+                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = MessageResponse.class)))
             }
     )
     @PostMapping
     public ResponseEntity<RentalResponse> createRental(
             @ModelAttribute RentalMultipartDto rentalMultipartDto) {
-            //,HttpServletRequest request) {
-        // Récupérer l'ID utilisateur via JwtService
-        //        Integer ownerId = jwtService.extractUserIdFromRequest(request);
-        //        if (ownerId == null) {
-                      // Ceci ne doit pas arriver puisqu'authentifié
-        //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        //        }
-
         // Appeler le service avec le DTO
         Rental savedRental = rentalService.createRental(rentalMultipartDto);
 
