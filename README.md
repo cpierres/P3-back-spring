@@ -1,12 +1,5 @@
 # Projet P3 Backend Spring 
 
-## URL de la documentation Swagger
-La documentation Swagger est disponible à l'URL suivante :  
-`http://localhost:{PORT}/swagger-ui/index.html`  
-Remplacez `{PORT}` par le port configuré pour votre application (par défaut : 3001).
-
----
-
 ## Installation de la base de données
 Cette section explique comment installer et configurer la base de données MySQL pour un poste de développeur.
 
@@ -94,6 +87,13 @@ Ajoutez les variables d'environnement suivantes à votre système ou à votre fi
 
 ---
 
+## URL de la documentation Swagger
+La documentation Swagger est disponible à l'URL suivante :  
+`http://localhost:{PORT}/swagger-ui/index.html`  
+Remplacez `{PORT}` par le port configuré pour votre application (par défaut : 3001).
+
+---
+
 ## Chargement du front-end correspondant
 Ce projet backend est lié à un projet Angular pour la partie front-end. Suivez ces étapes pour configurer et exécuter le front-end.
 
@@ -161,8 +161,8 @@ Chaque requête inclut les headers, les body, et l'authentification nécessaires
 ---
 
 ## Remarques
-- **Docker** : Assurez-vous que Docker est correctement installé et en cours d'exécution sur votre machine.
-- **MySQL Scripts** : Vérifiez que les scripts SQL `create_db.sql` et `init_schema.sql` se trouvent dans le dossier `db/`.
+- **Docker** : Assurez-vous que Docker est correctement installé et en cours d'exécution.
+- **MySQL Scripts** : les scripts SQL `create_db.sql` et `init_schema.sql` se trouvent dans le dossier `db/`.
 - **Front/Back** : Veillez à ce que les ports et les URLs des deux projets soient correctement synchronisés.
 
 ---
