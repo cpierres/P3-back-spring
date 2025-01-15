@@ -1,4 +1,5 @@
-# Projet P3 Backend Spring 
+# Projet P3 Backend Spring pour :
+![Chatop.jpg](assets/docs/images/Chatop.jpg)
 
 ## Installation de la base de données
 Cette section explique comment installer et configurer la base de données MySQL pour un poste de développeur.
@@ -35,13 +36,16 @@ services:
 
 Utilisez un client SQL (comme MySQL Workbench) ou un shell MySQL pour exécuter ces scripts.
 
+Pour info, la structure de la DB est celle-ci :
+![db-er-chatop.jpg](assets/docs/images/db-er-chatop.jpg)
+
 ---
 
 ## Installation et lancement du projet
 
 ### Étape 1 : Configuration des variables d'environnement
 Ajoutez les variables d'environnement suivantes à votre système ou à votre fichier de configuration (`.env` conseillé) :
-- **`JWT_SECRET_KEY`** : Génère une clé HS256 pour la gestion des tokens.  
+- **`P3_JWT_SECRET_KEY`** : Génère une clé HS256 pour la gestion des tokens.  
   Vous pouvez générer cette clé avec la classe utilitaire suivante :
   ```java
   package com.cpierres.p3backspring.utils;
@@ -73,6 +77,8 @@ Ajoutez les variables d'environnement suivantes à votre système ou à votre fi
 - **`P3_DB_USER`** : Nom de l'utilisateur créé pour l'application (exemple : `opencr_user`).
 
 - **`P3_DB_PASSWORD`** : Mot de passe de l'utilisateur (exemple : `opencr_pw1!`).
+
+- **`P3_PORT`** : Port du backend (par défaut : `3001`). Doit être en adéquation avec le frontend.
 
 ### Étape 2 : Lancement du backend
 1. Assurez-vous que les variables d'environnement sont correctement définies.

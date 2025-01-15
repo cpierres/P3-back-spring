@@ -31,7 +31,15 @@ public class JwtService {
         );
     }
 
-    // Générer un token JWT
+    //
+
+    /**
+     * Générer un token JWT en y incluant le username (classique) mais aussi son id,
+     * afin de pouvoir retrouver/extraire ce dernier à partir de tout traitement.
+     * @param id identifiant unique de l'utilisateur
+     * @param username son adresse email unique
+     * @return token crypté en HS256
+     */
     public String generateToken(Integer id, String username) {
         return Jwts.builder()
                 .setSubject(username) // Nom d'utilisateur (claim "sub")
