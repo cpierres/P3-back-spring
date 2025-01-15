@@ -23,6 +23,9 @@ public class JwtService {
 
     private SecretKey SECRET_KEY;
 
+    @Value("${JWT_EXPIRATION_TIME}")
+    private Integer JWT_EXPIRATION_TIME;
+
     @PostConstruct
     public void initializeSecretKey() {
         SECRET_KEY = new SecretKeySpec(
@@ -30,8 +33,6 @@ public class JwtService {
                 SignatureAlgorithm.HS256.getJcaName()
         );
     }
-
-    //
 
     /**
      * Générer un token JWT en y incluant le username (classique) mais aussi son id,
@@ -45,7 +46,7 @@ public class JwtService {
                 .setSubject(username) // Nom d'utilisateur (claim "sub")
                 .claim("id", id)      // Claim personnalisé pour inclure l'ID du user nécessaire
                 .setIssuedAt(new Date()) // Date d'émission
-                .setExpiration(new Date(System.currentTimeMillis() + 3600 * 1000)) // Expiration
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_TIME * 1000)) // Expiration
                 .signWith(SECRET_KEY) // Signature avec clé secrète
                 .compact();
     }

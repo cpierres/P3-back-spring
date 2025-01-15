@@ -36,7 +36,8 @@ services:
 
 Utilisez un client SQL (comme MySQL Workbench) ou un shell MySQL pour exécuter ces scripts.
 
-Pour info, la structure de la DB est celle-ci :
+La structure de la DB est celle-ci :
+
 ![db-er-chatop.jpg](assets/docs/images/db-er-chatop.jpg)
 
 ---
@@ -44,7 +45,7 @@ Pour info, la structure de la DB est celle-ci :
 ## Installation et lancement du projet
 
 ### Étape 1 : Configuration des variables d'environnement
-Ajoutez les variables d'environnement suivantes à votre système ou à votre fichier de configuration (`.env` conseillé) :
+Ajoutez les variables d'environnement suivantes à votre système ou à votre fichier de configuration :
 - **`P3_JWT_SECRET_KEY`** : Génère une clé HS256 pour la gestion des tokens.  
   Vous pouvez générer cette clé avec la classe utilitaire suivante :
   ```java
@@ -67,6 +68,8 @@ Ajoutez les variables d'environnement suivantes à votre système ou à votre fi
   }
   ```
   Copiez la clé encodée en base64 et assignez-la à `JWT_SECRET_KEY`.
+
+- **`P3_JWT_EXPIRATION_TIME`** : temps en millisecondes pour expiration du token (3600 par défaut) 
 
 - **`P3_DB_URL`** : URL de connexion à la base de données.  
   Exemple :
