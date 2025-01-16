@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(
+        name = "rental-controller",
+        description = """
+                Cette API permet de gérer les locations. Elle inclut la création d'une nouvelle location, la 
+                récupération des données d'une location, et la mise à jour des locations.
+                """
+)
 @RestController
 @RequestMapping("/api/rentals")
 public class RentalController {
@@ -42,13 +50,13 @@ public class RentalController {
             ),
             responses = {
                     @ApiResponse(responseCode = "201", description = "Location créée avec succès.",
-                           content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponse.class))),
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponse.class))),
                     @ApiResponse(responseCode = "400", description = "Les données de requête sont invalides.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponse.class))),
                     @ApiResponse(responseCode = "401", description = "Utilisateur non authentifié",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponse.class))),
                     @ApiResponse(responseCode = "500", description = "Erreur lors du téléchargement de l'image.",
-                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = MessageResponse.class)))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessageResponse.class)))
             }
     )
     @PostMapping
@@ -70,9 +78,9 @@ public class RentalController {
             summary = "Récupérer la liste de toutes les locations",
             description =
                     """
-                    Renvoie la liste des locations sous forme d'objets RentalDto. 
-                    Cette méthode passe par des DTOs pour éviter les problèmes de sérialisation liés au lazy loading.
-                    """
+                            Renvoie la liste des locations sous forme d'objets RentalDto. 
+                            Cette méthode passe par des DTOs pour éviter les problèmes de sérialisation liés au lazy loading.
+                            """
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Liste des locations récupérée avec succès",
@@ -170,6 +178,6 @@ public class RentalController {
                             schema = @Schema(implementation = RentalDetailDto.class)))
             @ModelAttribute RentalDetailDto rentalDetailDto) {
         RentalDto updatedRental = rentalService.updateRental(id, rentalDetailDto);//peut lancer RentalNotFoundException
-        return ResponseEntity.ok(new RentalResponse("Location "+updatedRental.getName()+" mise à jour !"));
+        return ResponseEntity.ok(new RentalResponse("Location " + updatedRental.getName() + " mise à jour !"));
     }
 }

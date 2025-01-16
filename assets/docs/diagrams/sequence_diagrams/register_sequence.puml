@@ -1,0 +1,22 @@
+@startuml
+actor Utilisateur
+participant AuthController
+participant AuthService
+participant UserMapper
+participant PasswordEncoder
+participant JwtService
+participant UserRepository
+
+Utilisateur -> AuthController : POST /register (RegisterRequest)
+AuthController -> AuthService : register(RegisterRequest)
+AuthService -> UserMapper : map(RegisterRequest -> User)
+UserMapper --> AuthService : retourne User
+AuthService -> PasswordEncoder : encode(password)
+PasswordEncoder --> AuthService : retourne mot de passe encodé
+AuthService -> JwtService : generateToken(User)
+JwtService --> AuthService : retourne JWT Token
+AuthService -> UserRepository : save(User)
+UserRepository --> AuthService : confirme sauvegarde de l'utilisateur
+AuthService --> AuthController : AuthSuccess(token + email)
+AuthController --> Utilisateur : HTTP 201 (AuthSuccess)
+@enduml

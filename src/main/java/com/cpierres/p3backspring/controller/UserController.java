@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(
+        name = "user-controller",
+        description = """
+                Cette API permet de gérer les utilisateurs et leurs informations. Elle inclut la récupération des 
+                détails d'un utilisateur. Ultérieurement seront développés des endpoint pour afficher la liste des 
+                utilisateurs et la suppression.
+                """
+)
 @RestController
 @RequestMapping("/api/user")
 public class UserController {

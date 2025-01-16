@@ -10,15 +10,28 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(
+        name = "auth-controller",
+        description = """
+                Cette API permet de gérer l'authentification, l'enregistrement, et les informations des utilisateurs 
+                connectés. Les méthodes utilisent des tokens JWT pour une authentification stateless sécurisée.
+                """
+)
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
+/**
+ * Diagramme UML associé :
+ * [Diagramme de séquence d'inscription](file://docs/diagrams/sequence_diagrams/register_sequence.puml)
+ * Ce fichier `.puml` décrit les interactions pour le flux d'inscription (register).
+ */
 public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
