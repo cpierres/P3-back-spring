@@ -1,0 +1,27 @@
+@startuml
+actor ClientAngular
+participant Server
+participant JwtInterceptor <<HttpInterceptor>>
+
+ClientAngular -> Server: Demande d'authentification
+Server --> ClientAngular: JWT généré
+note over of ClientAngular
+    Stockage du JWT (localStorage)
+end note
+
+ClientAngular -> JwtInterceptor: Prépare une nouvelle requête HTTP
+JwtInterceptor -> JwtInterceptor: Ajout du JWT au header Authorization
+note right of JwtInterceptor
+    JwtInterceptor implémente HttpInterceptor
+end note
+JwtInterceptor -> Server: Envoie la requête avec le token
+
+Server -> Server: Décodage et validation du JWT
+note right of Server
+    - Signature correcte ?
+    - Token expiré ?
+    - Permissions ?
+end note
+
+Server --> ClientAngular: Réponse à la requête
+@enduml

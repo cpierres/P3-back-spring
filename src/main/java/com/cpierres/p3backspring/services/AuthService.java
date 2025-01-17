@@ -41,11 +41,9 @@ public class AuthService {
     public Integer login(LoginRequest loginRequest) {
         Optional<User> user = userRepository.findByEmail(loginRequest.getEmail());
 
-        if (!user.isEmpty()) {
+        if (user.isPresent()) {
             // Vérification du mot de passe
             if (passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
-                Integer userId = user.get().getId();
-                log.debug("*** AuthService.login: OK *** => userId = " + userId);
                 return user.get().getId();
             }
         }
@@ -58,12 +56,6 @@ public class AuthService {
             throw new ResourceAlreadyExistException("Un utilisateur avec cet email existe déjà !");
         }
 
-//        // Créer un nouvel utilisateur avec le mot de passe haché ; mapping MANUEL (lourd et non centralisé)
-//        User newUser = new User();
-//        newUser.setEmail(request.getEmail());
-//        newUser.setName(request.getName() != null ? request.getName() : request.getEmail()); // nom par défaut
-//        newUser.setPassword(passwordEncoder.encode(request.getPassword())); // Encrypter le mot de passe
-
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         //Mapper le RegisterRequest vers entité User via mappping AUTOMATIQUE (mapstruct)
         //en tenant compte du traitement particulier sur le password
@@ -75,7 +67,6 @@ public class AuthService {
 
     public User getAuthenticatedUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        //log.debug("*** AuthService.getAuthenticatedUser: OK *** => userDto = " + userMapper.userToUserDto(user));
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé!"));
     }

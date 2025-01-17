@@ -1,0 +1,44 @@
+@startuml
+actor Utilisateur
+participant AuthController
+participant AuthService
+participant UserMapper
+participant PasswordEncoder
+note over PasswordEncoder : Bean Spring Security
+participant JwtService
+participant UserRepository
+participant GlobalExceptionHandler
+participant User
+
+Utilisateur -> AuthController : POST /register (RegisterRequest)
+note over AuthController : Validation avec @Valid
+alt DTO invalide
+    AuthController -> GlobalExceptionHandler : Lève Exception (MethodArgumentNotValidException)
+    GlobalExceptionHandler --> AuthController : Retourne HTTP 400 (Erreur Bad Request)
+    AuthController --> Utilisateur : HTTP 400 (MessageResponse: "Validation échouée")
+else DTO valide
+    AuthController -> AuthService : register(RegisterRequest)
+    AuthService -> UserRepository : findByEmail(email)
+    alt Email existe
+        UserRepository --> AuthService : retourne vrai
+        AuthService -> GlobalExceptionHandler : Lève Exception (UserAlreadyExists)
+        GlobalExceptionHandler --> AuthController : Retourne HTTP 409 (Erreur Conflict)
+        AuthController --> Utilisateur : HTTP 409 (MessageResponse: "Email déjà utilisé")
+    else Email inexistant
+        UserRepository --> AuthService : retourne faux
+        AuthService -> UserMapper : map(RegisterRequest -> User)
+        UserMapper --> AuthService : retourne instance de User
+        note over User : Création entité User
+        AuthService -> PasswordEncoder : encode(password)
+        PasswordEncoder --> AuthService : retourne mot de passe encodé
+        note over AuthService : Mise à jour entité User avec mot de passe encodé
+        AuthService -> UserRepository : save(User)
+        UserRepository --> AuthService : confirme sauvegarde
+        AuthService --> AuthController : retourne confirmation de création
+        note over AuthController : Génération du token après sauvegarde de l'utilisateur
+        AuthController -> JwtService : generateToken(User)
+        JwtService --> AuthController : retourne JWT Token
+        AuthController --> Utilisateur : HTTP 201 (AuthSuccess avec JWT token)
+    end
+end
+@enduml

@@ -17,6 +17,6 @@ AuthService -> JwtService : generateToken(User)
 JwtService --> AuthService : retourne JWT Token
 AuthService -> UserRepository : save(User)
 UserRepository --> AuthService : confirme sauvegarde de l'utilisateur
-AuthService --> AuthController : AuthSuccess(token + email)
+AuthService --> AuthController : AuthSuccess(token)
 AuthController --> Utilisateur : HTTP 201 (AuthSuccess)
 @enduml

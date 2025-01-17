@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ import java.util.List;
                 récupération des données d'une location, et la mise à jour des locations.
                 """
 )
+@SecurityRequirement(name = "Bearer Authentication") // Protège toutes les méthodes du contrôleur
 @RestController
 @RequestMapping("/api/rentals")
 public class RentalController {

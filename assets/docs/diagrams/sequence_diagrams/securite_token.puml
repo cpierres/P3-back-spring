@@ -1,0 +1,22 @@
+@startuml
+actor Client as "Client Angular"
+participant Server as "Serveur Autonome (Spring Boot)"
+
+Client -> Server: 1. Envoi des identifiants \n(email + mot de passe)
+Server -> Server: Validation des identifiants
+Server --> Client: 2. Génère un JWT signé (HS256) \net le renvoie
+
+Client -> Server: 3. Requête HTTP \nAuthorization: Bearer <JWT>
+Server -> Server: Décodage et validation du JWT:
+note right of Server
+    - Signature correcte ?
+    - Token expiré ?
+    - Permissions ?
+end note
+
+alt Token valide
+    Server --> Client: 5. Accès à la ressource autorisé
+else Token invalide ou expiré
+    Server --> Client: 401 Unauthorized
+end
+@enduml

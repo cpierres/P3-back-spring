@@ -1,0 +1,30 @@
+@startuml
+actor Utilisateur
+
+Utilisateur -> AuthController: POST /login (loginRequest)
+AuthController -> JwtService: login(loginRequest)
+JwtService -> Database: Récupérer l'utilisateur et valider le mot de passe
+Database --> JwtService: L'utilisateur est valide
+JwtService -> JwtService: Générer le JWT
+JwtService --> AuthController: JWT
+AuthController --> Utilisateur: JWT
+
+Utilisateur -> SecurityFilter: GET /endpoint-securisé (avec le token Bearer)
+note over of SecurityFilter
+    Bean géré par Spring
+    (défini dans configuration
+    de Spring Security)
+end note
+
+SecurityFilter -> JwtDecoder: Valider la signature du token et les claims (exp, aud, etc.)
+note over of JwtDecoder
+    Bean géré par Spring
+    (défini dans configuration
+    de Spring Security)
+end note
+JwtDecoder --> SecurityFilter: Le token est valide
+SecurityFilter -> SecurityContext: Définir l'objet Authentication
+SecurityFilter -> Application: Continuer vers l'exécution du contrôleur
+Application --> Utilisateur: Réponse (données, 200)
+
+@enduml

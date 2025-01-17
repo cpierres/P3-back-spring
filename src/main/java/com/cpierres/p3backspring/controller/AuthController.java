@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -28,26 +29,24 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 /**
- * Diagramme UML associé :
- * [Diagramme de séquence d'inscription](file://docs/diagrams/sequence_diagrams/register_sequence.puml)
+ * Diagrammes UML associés :
+ * [Diagramme de séquence d'inscription](file://docs/diagrams/sequence_diagrams/register_10_nominal_sequence.puml)
+ * [Diagramme de séquence d'inscription](file://docs/diagrams/sequence_diagrams/register_20_full_sequence.puml)
  * Ce fichier `.puml` décrit les interactions pour le flux d'inscription (register).
  */
 public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
     private final UserMapper userMapper;
-    //private final AuthenticationManager authenticationManager;
 
     @Autowired
     public AuthController(
             AuthService authService,
             JwtService jwtService,
-            // AuthenticationManager authenticationManager
             UserMapper userMapper
     ) {
         this.authService = authService;
         this.jwtService = jwtService;
-        //this.authenticationManager = authenticationManager;
         this.userMapper = userMapper;
     }
 
@@ -56,7 +55,9 @@ public class AuthController {
                     L'utilisateur sera connecté via une authentification stateless (token).
                     Si email et/ou mot de passe incorrect, message erreur (ne précisant volontairement 
                     pas quel élément est en erreur).
-                    """)
+                    """,
+            security = @SecurityRequirement(name = "") // Désactive la sécurité
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Succès : retour du token JWT ",
                     content = @Content(mediaType = "application/json",
@@ -67,12 +68,7 @@ public class AuthController {
     })
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
-        log.debug("*** AuthController.login ***");
-//            Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
-//            );
-
-        //userId non null si utilisateur connu
+        //userId non null si utilisateur authentifié
         Integer userId = authService.login(loginRequest);
         if (userId != null) {
             // Générer un JWT après authentification réussie (avec l'id user qui nous sera utile + tard)
@@ -98,6 +94,7 @@ public class AuthController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = MessageResponse.class)))
     })
+    @SecurityRequirement(name = "") // Aucun schéma de sécurité
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest request) {
         User user = authService.registerNewUser(request);
@@ -114,6 +111,7 @@ public class AuthController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = MessageResponse.class))),
     })
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser() {
         UserDto currentUser = userMapper.userToUserDto(authService.getAuthenticatedUser());
