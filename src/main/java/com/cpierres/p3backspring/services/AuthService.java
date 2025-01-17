@@ -13,10 +13,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 public class AuthService {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
@@ -28,20 +29,27 @@ public class AuthService {
         this.userMapper = userMapper;
     }
 
+    /**
+     * Authentifie un utilisateur en fonction de son e-mail et de son mot de passe.
+     * Si l'e-mail de l'utilisateur n'est pas trouvé ou bien si le mot de passe fourni est incorrect,
+     * la méthode renvoie null sans lever d'exception.
+     * On ne veut pas donner d'indication précise sur la raison précise qui a empêché l'authentification.
+     *
+     * @param loginRequest La demande de connexion contenant l'e-mail et le mot de passe de l'utilisateur.
+     * @return L'ID de l'utilisateur s'il est authentifié avec succès, ou null si ce n'est pas le cas.
+     */
     public Integer login(LoginRequest loginRequest) {
-        log.debug("*** AuthService.login ***");
-        User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("Email utilisateur non trouvé!"));
+        Optional<User> user = userRepository.findByEmail(loginRequest.getEmail());
 
-        // Vérification du mot de passe
-        if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            Integer userId = user.getId();
-            log.debug("*** AuthService.login: OK *** => userId = " + userId);
-            return user.getId();
-        } else {
-            log.debug("*** AuthService.login: KO ***");
-            throw new RuntimeException("Mot de passe incorrect !");
+        if (!user.isEmpty()) {
+            // Vérification du mot de passe
+            if (passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
+                Integer userId = user.get().getId();
+                log.debug("*** AuthService.login: OK *** => userId = " + userId);
+                return user.get().getId();
+            }
         }
+        return null;
     }
 
     public User registerNewUser(RegisterRequest request) {
@@ -59,19 +67,11 @@ public class AuthService {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         //Mapper le RegisterRequest vers entité User via mappping AUTOMATIQUE (mapstruct)
         //en tenant compte du traitement particulier sur le password
-        User newUser = userMapper.registerRequestToUser(request,encodedPassword);
+        User newUser = userMapper.registerRequestToUser(request, encodedPassword);
 
         // Sauvegarder en base
         return userRepository.save(newUser);
     }
-
-//    public UserDto getAuthenticatedUser() {
-//        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//        User user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé!"));
-//        //log.debug("*** AuthService.getAuthenticatedUser: OK *** => userDto = " + userMapper.userToUserDto(user));
-//        return userMapper.userToUserDto(user);
-//    }
 
     public User getAuthenticatedUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();

@@ -51,8 +51,12 @@ public class AuthController {
         this.userMapper = userMapper;
     }
 
-    @Operation(summary = "Authentification d'un utilisateur déjà enregistré, via son email",
-            description = "L'utilisateur sera connecté via une authentification stateless")
+    @Operation(summary = "Authentification d'un utilisateur déjà enregistré, via son email et mot de passe",
+            description = """
+                    L'utilisateur sera connecté via une authentification stateless (token).
+                    Si email et/ou mot de passe incorrect, message erreur (ne précisant volontairement 
+                    pas quel élément est en erreur).
+                    """)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Succès : retour du token JWT ",
                     content = @Content(mediaType = "application/json",
