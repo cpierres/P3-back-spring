@@ -1,6 +1,7 @@
 package com.cpierres.p3backspring.exception;
 
 import com.cpierres.p3backspring.model.MessageResponse;
+import com.cpierres.p3backspring.model.ValidationErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,13 +18,18 @@ public class GlobalExceptionHandler {
      * Permet d'afficher un message synthétique lors de la validation des DTO
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex) {
-
+    public ResponseEntity<ValidationErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult()
                 .getFieldErrors()
                 .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-        return ResponseEntity.badRequest().body(errors);
+
+        ValidationErrorResponse response = new ValidationErrorResponse(
+                "Les données d'entrée ne sont pas valides.",
+                errors
+        );
+
+        return ResponseEntity.badRequest().body(response);
     }
 
     /**

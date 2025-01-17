@@ -81,20 +81,21 @@ public class AuthController {
 
     @Operation(summary = "Enregistrement d'un utilisateur (doublon sur email interdit)",
             description = """
-                    Suite à son enregistrement, le nouvel utilisateur est directement connecté (authentification stateless Bearer jwt
+                    Suite à son enregistrement, le nouvel utilisateur est directement connecté (authentification stateless Bearer jwt)
                     """)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Succès : retour du token JWT ",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = AuthSuccess.class))),
-            @ApiResponse(responseCode = "400", description = "Raison(s) de l'erreur (validation de RegisterRequest)"),
+            @ApiResponse(responseCode = "400", description = "Raison(s) de l'erreur (validation de RegisterRequest)",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ValidationErrorResponse.class))),
             @ApiResponse(responseCode = "409", description = "Un utilisateur avec cet email existe déjà",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = MessageResponse.class)))
     })
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest request) {
-        log.debug("*** AuthController.registerUser ***");
         User user = authService.registerNewUser(request);
         String token = jwtService.generateToken(user.getId(), user.getEmail());
         return ResponseEntity.ok(new AuthSuccess(token));
