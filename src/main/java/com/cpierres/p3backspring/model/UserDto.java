@@ -3,7 +3,6 @@ package com.cpierres.p3backspring.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -29,6 +28,9 @@ public class UserDto {
     @NotBlank(message = "L'adresse e-mail ne peut pas être vide")
     private String email;
 
+    @Schema(description = "Date/heure de création en lecture seule car gérée par le système")
     private Instant created_at;
+
+    @Schema(description = "Date/heure de mise à jour gérée par le système")
     private Instant updated_at;
 }

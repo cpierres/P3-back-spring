@@ -3,8 +3,6 @@ package com.cpierres.p3backspring.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Objects;
-
 //@Data //pas compatible avec extends
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

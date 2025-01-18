@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(
         name = "user-controller",
         description = """
-                Cette API permet de gérer les utilisateurs et leurs informations. Elle inclut la récupération des 
-                détails d'un utilisateur. Ultérieurement seront développés des endpoint pour afficher la liste des 
+                Cette API permet de gérer les utilisateurs et leurs informations. Elle inclut la récupération des
+                détails d'un utilisateur. Ultérieurement seront développés des endpoint pour afficher la liste des
                 utilisateurs et la suppression.
                 """
 )
@@ -46,7 +46,11 @@ public class UserController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = UserDto.class)
                     )),
-            @ApiResponse(responseCode = "401", description = "Non autorisé. Authentification requise pour accéder à cet endpoint."),
+            @ApiResponse(responseCode = "401", description = "Non autorisé. Authentification requise pour accéder à cet endpoint.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = MessageResponse.class)
+                    )),
             @ApiResponse(responseCode = "404", description = "Utilisateur introuvable.",
                     content = @Content(
                             mediaType = "application/json",

@@ -27,7 +27,7 @@ public class RentalDto {
     @NotNull(message = "Le superficie doit être renseignée")
     private Integer surface;
 
-    @Schema(description = "Le prix de la location", example = "150000")
+    @Schema(description = "Le prix de la location", example = "90")
     @NotNull(message = "Le prix doit être renseigné")
     private Integer price;
 
@@ -39,8 +39,12 @@ public class RentalDto {
 
     private String description;
 
+    @Schema(description = "Id de l'utilisateur propriétaire (mis à jour par le système)")
     private Integer owner_id;
 
+    @Schema(description = "Date/heure de création en lecture seule car gérée par le système")
     private Instant created_at;
+
+    @Schema(description = "Date/heure de mise à jour gérée par le système")
     private Instant updated_at;
 }

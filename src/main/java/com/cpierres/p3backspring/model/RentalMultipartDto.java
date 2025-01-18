@@ -24,21 +24,21 @@ public class RentalMultipartDto {
     @NotNull(message = "Le superficie doit être renseignée")
     private Integer surface;
 
-    @Schema(description = "Le prix de la location", example = "150000")
+    @Schema(description = "Le prix de la location", example = "90")
     @NotNull(message = "Le prix doit être renseigné")
     private Integer price;
 
     @Schema(
-            description = "Image ou photo associée à la location",
+            description = "Image ou photo associée à la location (input file)",
             type = "string", // Swagger lit `MultipartFile` en tant que fichier string
             format = "binary",
             example= "https://blog.technavio.org/wp-content/uploads/2018/12/Online-House-Rental-Sites.jpg"
     )
-    @NotNull(message = "Une photo doit être choisie ; QUESTION")
+    @NotNull(message = "Une photo doit être choisie")
     private MultipartFile picture;
 
-    @Schema(description = "Description de la location", maxLength = 2000)
-    @NotBlank(message = "Le titre de la location ne peut être vide")
+    @Schema(description = "Description de la location", maxLength = 2000, example = "Disponible en mars, juin et juillet")
+    @NotBlank(message = "La description de la location ne peut être vide")
     @Size(max=2000)
     private String description;
 
