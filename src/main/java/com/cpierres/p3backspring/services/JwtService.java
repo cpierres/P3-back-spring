@@ -21,10 +21,10 @@ public class JwtService {
     @Value("${JWT_SECRET_KEY}")
     private String BASE64_SECRET;
 
-    private SecretKey SECRET_KEY;
-
     @Value("${JWT_EXPIRATION_TIME}")
     private Integer JWT_EXPIRATION_TIME;
+
+    private SecretKey SECRET_KEY;
 
     @PostConstruct
     public void initializeSecretKey() {

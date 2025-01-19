@@ -42,7 +42,8 @@ public class AuthService {
         Optional<User> user = userRepository.findByEmail(loginRequest.getEmail());
 
         if (user.isPresent()) {
-            // Vérification du mot de passe
+            // Vérification du mot de passe via le bean passwordEncoder de SpringSecurity
+            // compare le mot de passe en clair avec le mot de passe encrypté de la DB
             if (passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
                 return user.get().getId();
             }
