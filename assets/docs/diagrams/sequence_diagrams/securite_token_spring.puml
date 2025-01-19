@@ -3,8 +3,8 @@ actor Utilisateur
 
 Utilisateur -> AuthController: POST /login (loginRequest)
 AuthController -> JwtService: login(loginRequest)
-JwtService -> Database: Récupérer l'utilisateur et valider le mot de passe
-Database --> JwtService: L'utilisateur est valide
+JwtService -> Repository: Récupérer l'utilisateur et valider le mot de passe
+Repository --> JwtService: L'utilisateur est valide
 JwtService -> JwtService: Générer le JWT
 JwtService --> AuthController: JWT
 AuthController --> Utilisateur: JWT
@@ -24,7 +24,7 @@ note over of JwtDecoder
 end note
 JwtDecoder --> SecurityFilter: Le token est valide
 SecurityFilter -> SecurityContext: Définir l'objet Authentication
-SecurityFilter -> Application: Continuer vers l'exécution du contrôleur
-Application --> Utilisateur: Réponse (données, 200)
+SecurityFilter -> RestController: Continuer vers l'exécution du contrôleur
+RestController --> Utilisateur: Réponse (données, 200)
 
 @enduml

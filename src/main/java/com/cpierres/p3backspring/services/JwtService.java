@@ -60,7 +60,7 @@ public class JwtService {
      * Récupérer l'ID depuis le jeton JWT
      *
      * @param token
-     * @return
+     * @return id du user
      */
     public Integer extractIdFromToken(String token) {
         Claims claims = Jwts.parserBuilder()

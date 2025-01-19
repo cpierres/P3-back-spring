@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(
         name = "auth-controller",
         description = """
-                Cette API permet de gérer l'authentification, l'enregistrement, et les informations des utilisateurs 
+                Cette API permet de gérer l'authentification, l'enregistrement, et les informations des utilisateurs
                 connectés. Les méthodes utilisent des tokens JWT pour une authentification stateless sécurisée.
                 """
 )
@@ -30,8 +30,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 /**
  * Diagrammes UML associés :
- * [Diagramme de séquence d'inscription](file://docs/diagrams/sequence_diagrams/register_10_nominal_sequence.puml)
- * [Diagramme de séquence d'inscription](file://docs/diagrams/sequence_diagrams/register_20_full_sequence.puml)
+ * [Diagramme de séquence d'inscription](file://docs/diagrams/sequence_diagrams/register_sequence.puml)
  * Ce fichier `.puml` décrit les interactions pour le flux d'inscription (register).
  */
 public class AuthController {
@@ -53,7 +52,7 @@ public class AuthController {
     @Operation(summary = "Authentification d'un utilisateur déjà enregistré, via son email et mot de passe",
             description = """
                     L'utilisateur sera connecté via une authentification stateless (token).
-                    Si email et/ou mot de passe incorrect, message erreur (ne précisant volontairement 
+                    Si email et/ou mot de passe incorrect, message erreur (ne précisant volontairement
                     pas quel élément est en erreur).
                     """,
             security = @SecurityRequirement(name = "") // Désactive la sécurité
