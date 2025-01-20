@@ -132,8 +132,9 @@ La documentation Swagger est disponible à l'URL suivante :
 Remplacez `{PORT}` par le port configuré pour votre application (par défaut : 3001).
 
 Cette documentation interactive permet de tester toutes les API, y compris les API sécurisées.
-Il suffira de copier le token retourné via `/api/auth/login` ou bien `/api/auth/register` dans une 
-boite de dialogue via le bouton **Authorize**
+Il suffira de copier le token retourné via `/api/auth/login` ou bien `/api/auth/register` dans la 
+boite de dialogue affichée via le bouton **Authorize**
+![swagger-rental.jpg](assets/docs/images/swagger-rental.jpg)
 
 ---
 
