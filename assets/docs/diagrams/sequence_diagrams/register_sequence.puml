@@ -1,14 +1,14 @@
 @startuml
 actor Utilisateur
-participant AuthController
-participant AuthService
-participant UserMapper
-participant PasswordEncoder
-note over PasswordEncoder : Bean Spring Security
-participant JwtService
-participant UserRepository
-participant GlobalExceptionHandler
-participant User
+participant AuthController <<RestController>>
+participant AuthService <<Service>>
+participant UserMapper <<Mapper>>
+participant passwordEncoder <<PasswordEncoder>>
+note over passwordEncoder : Bean Spring Security
+participant JwtService <<Component>>
+participant UserRepository <<JpaRepository>>
+participant GlobalExceptionHandler <<RestControllerAdvice>>
+participant User <<Entity>>
 
 Utilisateur -> AuthController : POST /register (RegisterRequest)
 note over AuthController : Validation avec @Valid
@@ -29,8 +29,8 @@ else DTO valide
         AuthService -> UserMapper : map(RegisterRequest -> User)
         UserMapper --> AuthService : retourne instance de User
         note over User : Création entité User
-        AuthService -> PasswordEncoder : encode(password)
-        PasswordEncoder --> AuthService : retourne mot de passe encodé
+        AuthService -> passwordEncoder : encode(password)
+        passwordEncoder --> AuthService : retourne mot de passe encodé
         note over AuthService : Mise à jour entité User avec mot de passe encodé
         AuthService -> UserRepository : save(User)
         UserRepository --> AuthService : confirme sauvegarde
