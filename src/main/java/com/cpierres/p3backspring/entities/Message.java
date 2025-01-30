@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 
-import java.util.Objects;
-
 //@Data //incompatible avec Auditable ! oblige à devoir créer hashcode et equals ? Dommage
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Getter
 @Setter
 @Builder
@@ -32,16 +32,4 @@ public class Message extends Auditable {
     @Column(name = "message", length = 2000)
     private String message;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Message msg = (Message) o;
-        return Objects.equals(id, msg.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }
