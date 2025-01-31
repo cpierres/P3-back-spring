@@ -24,7 +24,7 @@ note over of securityFilterChain
     de Spring Security)
 end note
 
-securityFilterChain -> jwtDecoder: Valider la signature du token et les claims (exp, aud, etc.)
+securityFilterChain -> jwtDecoder: Valider la signature du token et les claims (email, id)
 note over of jwtDecoder
     Bean géré par Spring
     (défini dans configuration

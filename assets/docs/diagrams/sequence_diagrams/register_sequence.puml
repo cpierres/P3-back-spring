@@ -1,14 +1,19 @@
 @startuml
 actor Utilisateur
+box Couche Présentation #LightBlue
 participant AuthController <<RestController>>
-participant AuthService <<Service>>
+participant GlobalExceptionHandler <<RestControllerAdvice>>
+end box
 participant UserMapper <<Mapper>>
+participant AuthService <<Service>>
+participant JwtService <<Component>>
 participant passwordEncoder <<PasswordEncoder>>
 note over passwordEncoder : Bean Spring Security
-participant JwtService <<Component>>
-participant GlobalExceptionHandler <<RestControllerAdvice>>
-participant UserRepository <<JpaRepository>>
-participant User <<Entity>>
+
+box Couche Persistence #LightGreen
+    participant UserRepository <<JpaRepository>>
+    participant User <<Entity>>
+end box
 
 Utilisateur -> AuthController : POST /register (RegisterRequest)
 note over AuthController : Validation avec @Valid
